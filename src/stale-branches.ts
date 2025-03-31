@@ -25,6 +25,8 @@ import {getPr} from './functions/get-pr'
 import {logSkippedBranch} from './functions/logging/log-skipped-branch'
 import {logBranchGroupColorSkip} from './functions/logging/log-branch-group-color-skip'
 import {Inputs} from './types/inputs'
+import {notifyOldBranches} from './functions/send-team-message'
+import {repo} from './functions/get-context'
 
 async function closeIssueWrappedLogs(issueNumber: number, validInputs: Inputs, branchName: string): Promise<string> {
   if (!validInputs.ignoreIssueInteraction && !validInputs.dryRun) {
@@ -40,6 +42,7 @@ export async function run(): Promise<void> {
   //Declare output arrays
   const outputDeletes: string[] = []
   const outputStales: string[] = []
+  const affectedBranches: { [key: string]: string } = {};
 
   try {
     //Validate & Return input values
@@ -106,6 +109,9 @@ export async function run(): Promise<void> {
             core.info(`Dry Run: Issue would be created for branch: ${branchToCheck.branchName}`)
           } else if (validInputs.ignoreIssueInteraction) {
             core.info(`Ignoring issue interaction: Issue would be created for branch: ${branchToCheck.branchName}`)
+          } else if (validInputs.interactMsTeam) {
+            // collect branch for sending message step
+            affectedBranches[branchToCheck.branchName] = lastCommitLogin
           }
           issueBudgetRemaining--
           core.info(logMaxIssues(issueBudgetRemaining))
@@ -173,6 +179,14 @@ export async function run(): Promise<void> {
       // Close output group for current branch assessment
       core.endGroup()
     }
+    // Call function to send message
+    notifyOldBranches({
+      repo,
+      affectedBranches,
+      workflowUrl: validInputs.workflowHookUrl, // Ensure this property exists in validInputs
+      token: validInputs.msToken // Replace 'token' with 'msToken'
+    });
+
     // Close orphaned Issues
     if (existingIssue.length > 0) {
       core.startGroup(logOrphanedIssues(existingIssue.length))

@@ -102,4 +102,8 @@ export interface Inputs {
    * Support boolean input list: `true | True | TRUE | false | False | FALSE`.
    */
   includeProtectedBranches: boolean
+
+  interactMsTeam: boolean
+  workflowHookUrl: string
+  msToken: string
 }

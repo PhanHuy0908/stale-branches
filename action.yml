@@ -58,6 +58,18 @@ inputs:
     description: 'If this is enabled, the action will include protected branches in the process.'
     required: false
     default: 'false'
+  interact-ms-team:
+    description: 'If this is enabled, the action will use ms team hook to send the notification.'
+    required: false
+    default: 'false'
+  workflow-hook-url:
+    description: 'Use for send message to MS team'
+    required: false
+    default: ''
+  ms-token:
+    description: 'Use for send message to MS team'
+    required: false
+    default: ''
 outputs:
   deleted-branches:
     description: 'List of all deleted branches.'

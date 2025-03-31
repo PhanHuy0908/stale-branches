@@ -76,6 +76,9 @@ export async function validateInputs(): Promise<Inputs> {
     const dryRun = core.getBooleanInput('dry-run')
     const ignoreIssueInteraction = core.getBooleanInput('ignore-issue-interaction')
     const includeProtectedBranches = core.getBooleanInput('include-protected-branches')
+    const interactMsTeam = core.getBooleanInput('interact-ms-team')
+    const workflowHookUrl = core.getInput('workflow-hook-url')
+    const msToken = core.getInput('ms-token')
 
     //Assign inputs
     result.daysBeforeStale = inputDaysBeforeStale
@@ -91,6 +94,9 @@ export async function validateInputs(): Promise<Inputs> {
     result.dryRun = dryRun
     result.ignoreIssueInteraction = ignoreIssueInteraction
     result.includeProtectedBranches = includeProtectedBranches
+    result.interactMsTeam = interactMsTeam
+    result.workflowHookUrl = workflowHookUrl
+    result.msToken = msToken
   } catch (err: unknown) {
     if (err instanceof Error) {
       core.setFailed(`Failed to validate inputs. Error: ${err.message}`)

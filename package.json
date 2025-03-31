@@ -29,12 +29,13 @@
     "actions"
   ],
   "dependencies": {
-    "@actions/core": "1.11.1",
+    "@actions/core": "^1.11.1",
     "@actions/github": "6.0.0",
     "@octokit/plugin-paginate-rest": "11.6.0",
     "@octokit/types": "12.5.0",
     "@types/semver": "7.7.0",
-    "assert": "2.1.0"
+    "assert": "2.1.0",
+    "axios": "^1.8.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
