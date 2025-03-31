@@ -2346,6 +2346,7 @@ function run() {
                         }
                         else if (validInputs.interactMsTeam) {
                             // collect branch for sending message step
+                            core.info(`Add branch ${branchToCheck.branchName} to message content`);
                             affectedBranches[branchToCheck.branchName] = lastCommitLogin;
                         }
                         issueBudgetRemaining--;
@@ -2374,8 +2375,13 @@ function run() {
                             else if (validInputs.dryRun) {
                                 core.info(`Dry Run: Issue would be updated for branch: ${branchToCheck.branchName}`);
                             }
-                            else if (validInputs.ignoreIssueInteraction) {
+                            else if (validInputs.ignoreIssueInteraction && !validInputs.interactMsTeam) {
                                 core.info(`Ignoring issue interaction: Issue would be updated for branch: ${branchToCheck.branchName}`);
+                            }
+                            else if (validInputs.interactMsTeam) {
+                                // collect branch for sending message step
+                                core.info(`Add branch ${branchToCheck.branchName} to message content`);
+                                affectedBranches[branchToCheck.branchName] = lastCommitLogin;
                             }
                             if (!outputStales.includes(branchToCheck.branchName)) {
                                 outputStales.push(branchToCheck.branchName);
@@ -2404,7 +2410,8 @@ function run() {
                 core.endGroup();
             }
             // Call function to send message
-            (0, send_team_message_1.notifyOldBranches)({
+            core.info(`Sending message to MS Teams`);
+            yield (0, send_team_message_1.notifyOldBranches)({
                 repo: get_context_2.repo,
                 affectedBranches,
                 workflowUrl: validInputs.workflowHookUrl, // Ensure this property exists in validInputs
