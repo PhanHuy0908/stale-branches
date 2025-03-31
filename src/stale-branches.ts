@@ -107,7 +107,7 @@ export async function run(): Promise<void> {
             await createIssue(branchToCheck.branchName, commitAge, lastCommitLogin, validInputs.daysBeforeDelete, validInputs.staleBranchLabel, validInputs.tagLastCommitter)
           } else if (validInputs.dryRun) {
             core.info(`Dry Run: Issue would be created for branch: ${branchToCheck.branchName}`)
-          } else if (validInputs.ignoreIssueInteraction) {
+          } else if (validInputs.ignoreIssueInteraction && !validInputs.interactMsTeam) {
             core.info(`Ignoring issue interaction: Issue would be created for branch: ${branchToCheck.branchName}`)
           } else if (validInputs.interactMsTeam) {
             // collect branch for sending message step

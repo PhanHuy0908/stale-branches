@@ -2341,7 +2341,7 @@ function run() {
                         else if (validInputs.dryRun) {
                             core.info(`Dry Run: Issue would be created for branch: ${branchToCheck.branchName}`);
                         }
-                        else if (validInputs.ignoreIssueInteraction) {
+                        else if (validInputs.ignoreIssueInteraction && !validInputs.interactMsTeam) {
                             core.info(`Ignoring issue interaction: Issue would be created for branch: ${branchToCheck.branchName}`);
                         }
                         else if (validInputs.interactMsTeam) {
