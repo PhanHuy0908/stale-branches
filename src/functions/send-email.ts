@@ -59,7 +59,7 @@ async function sendInternalEmail(senderEmail: string, password: string, receiver
       from: senderEmail,
       to: receiverEmail,
       subject: subject,
-      text: body
+      html: body
     }
 
     const info = await transporter.sendMail(mailOptions)

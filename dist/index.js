@@ -1956,7 +1956,7 @@ function sendInternalEmail(senderEmail, password, receiverEmail, subject, body) 
                 from: senderEmail,
                 to: receiverEmail,
                 subject: subject,
-                text: body
+                html: body
             };
             const info = yield transporter.sendMail(mailOptions);
             console.log('✅ Email sent:', info.response);
