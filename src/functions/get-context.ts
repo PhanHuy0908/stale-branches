@@ -100,6 +100,9 @@ export async function validateInputs(): Promise<Inputs> {
     result.interactMsTeam = interactMsTeam
     result.workflowHookUrl = workflowHookUrl
     result.msToken = msToken
+    result.sendEmail = sendEmail
+    result.sender = sender
+    result.password = password
   } catch (err: unknown) {
     if (err instanceof Error) {
       core.setFailed(`Failed to validate inputs. Error: ${err.message}`)
