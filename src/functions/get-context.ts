@@ -79,6 +79,9 @@ export async function validateInputs(): Promise<Inputs> {
     const interactMsTeam = core.getBooleanInput('interact-ms-team')
     const workflowHookUrl = core.getInput('workflow-hook-url')
     const msToken = core.getInput('ms-token')
+    const sendEmail = core.getBooleanInput('send-email')
+    const sender = core.getInput('sender')
+    const password = core.getInput('password')
 
     //Assign inputs
     result.daysBeforeStale = inputDaysBeforeStale

@@ -27,6 +27,7 @@ import {logBranchGroupColorSkip} from './functions/logging/log-branch-group-colo
 import {Inputs} from './types/inputs'
 import {notifyOldBranches} from './functions/send-team-message'
 import {repo} from './functions/get-context'
+import {emailOldBranches} from './functions/send-email'
 
 async function closeIssueWrappedLogs(issueNumber: number, validInputs: Inputs, branchName: string): Promise<string> {
   if (!validInputs.ignoreIssueInteraction && !validInputs.dryRun) {
@@ -107,9 +108,9 @@ export async function run(): Promise<void> {
             await createIssue(branchToCheck.branchName, commitAge, lastCommitLogin, validInputs.daysBeforeDelete, validInputs.staleBranchLabel, validInputs.tagLastCommitter)
           } else if (validInputs.dryRun) {
             core.info(`Dry Run: Issue would be created for branch: ${branchToCheck.branchName}`)
-          } else if (validInputs.ignoreIssueInteraction && !validInputs.interactMsTeam) {
+          } else if (validInputs.ignoreIssueInteraction && !validInputs.interactMsTeam && !validInputs.sendEmail) {
             core.info(`Ignoring issue interaction: Issue would be created for branch: ${branchToCheck.branchName}`)
-          } else if (validInputs.interactMsTeam) {
+          } else if (validInputs.interactMsTeam || validInputs.sendEmail) {
             // collect branch for sending message step
             core.info(`Add branch ${branchToCheck.branchName} to message content`)
             affectedBranches[branchToCheck.branchName] = lastCommitLogin
@@ -149,9 +150,9 @@ export async function run(): Promise<void> {
               )
             } else if (validInputs.dryRun) {
               core.info(`Dry Run: Issue would be updated for branch: ${branchToCheck.branchName}`)
-            } else if (validInputs.ignoreIssueInteraction && !validInputs.interactMsTeam) {
+            } else if (validInputs.ignoreIssueInteraction && !validInputs.interactMsTeam && !validInputs.sendEmail) {
               core.info(`Ignoring issue interaction: Issue would be updated for branch: ${branchToCheck.branchName}`)
-            } else if (validInputs.interactMsTeam) {
+            } else if (validInputs.interactMsTeam || validInputs.sendEmail) {
               // collect branch for sending message step
               core.info(`Add branch ${branchToCheck.branchName} to message content`)
               affectedBranches[branchToCheck.branchName] = lastCommitLogin
@@ -185,13 +186,24 @@ export async function run(): Promise<void> {
       core.endGroup()
     }
     // Call function to send message
-    core.info(`Sending message to MS Teams`)
-    await notifyOldBranches({
-      repo,
-      affectedBranches,
-      workflowUrl: validInputs.workflowHookUrl, // Ensure this property exists in validInputs
-      token: validInputs.msToken // Replace 'token' with 'msToken'
-    });
+    if (validInputs.interactMsTeam) {
+      core.info(`Sending message to MS Teams`)
+      await notifyOldBranches({
+        repo,
+        affectedBranches,
+        workflowUrl: validInputs.workflowHookUrl, // Ensure this property exists in validInputs
+        token: validInputs.msToken // Replace 'token' with 'msToken'
+      });
+    }
+    if (validInputs.sendEmail) {
+      core.info(`Sending email to Outlook`)
+      await emailOldBranches({
+        repo,
+        affectedBranches,
+        sender: validInputs.sender,
+        password: validInputs.password
+      });
+    }
 
     // Close orphaned Issues
     if (existingIssue.length > 0) {

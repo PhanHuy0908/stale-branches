@@ -35,7 +35,8 @@
     "@octokit/types": "12.5.0",
     "@types/semver": "7.7.0",
     "assert": "2.1.0",
-    "axios": "^1.8.4"
+    "axios": "^1.8.4",
+    "nodemailer": "^6.10.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

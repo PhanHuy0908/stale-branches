@@ -106,4 +106,8 @@ export interface Inputs {
   interactMsTeam: boolean
   workflowHookUrl: string
   msToken: string
+
+  sendEmail: boolean
+  sender: string
+  password: string
 }

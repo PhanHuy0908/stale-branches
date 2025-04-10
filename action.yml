@@ -70,6 +70,18 @@ inputs:
     description: 'Use for send message to MS team'
     required: false
     default: ''
+  send-email:
+    description: 'If this is enabled, the action will use email to send the notification.'
+    required: false
+    default: 'false'
+  sender:
+    description: 'Email will be sent by this sender.'
+    required: false
+    default: ''
+  password:
+    description: 'Passwork for email sender.'
+    required: false
+    default: ''
 outputs:
   deleted-branches:
     description: 'List of all deleted branches.'
